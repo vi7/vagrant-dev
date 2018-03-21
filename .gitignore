@@ -1,0 +1,5 @@
+# Sublime Text
+*.sublime-workspace
+
+# Vagrant
+.vagrant
