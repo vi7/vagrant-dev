@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# custom.sh
+
+# Custom user provision script for Vagrant machine

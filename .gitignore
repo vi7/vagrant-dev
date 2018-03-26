@@ -3,3 +3,8 @@
 
 # Vagrant
 .vagrant
+
+# Environment specific configs and sensitive keys
+*.pem
+dev_config.yml
+scripts/custom.sh

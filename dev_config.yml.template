@@ -1,0 +1,8 @@
+# path to the code repositories local dir to have you code available inside the Vagrant VM
+dev_dir: '/Users/IvanIvanov/Devel'
+# port mapping for a port forwarding configuration, key - VM port, value - corresponding host port
+port_mapping:
+  # Netatalk AFP port
+  548: 9548
+  443: 9443
+  80:  980
