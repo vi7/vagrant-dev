@@ -3,6 +3,9 @@
 	[
 		{
 			"path": "."
+		},
+		{
+			"path": "/Users/vdmitrie1/gitrepo/vdm_private/ansible-role-vagrant-dev"
 		}
 	]
 }

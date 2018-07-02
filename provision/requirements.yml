@@ -1,0 +1,3 @@
+- src: https://github.com/vi7/ansible-role-vagrant-dev.git
+  version: 0.1.0
+  name: vagrant-dev

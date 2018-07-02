@@ -6,6 +6,10 @@ require 'logger'
 
 log = Logger.new(STDOUT)
 
+# Local vars
+repo_provision_dir = 'provision'
+provisioning_path = '/home/vagrant/provision'
+
 # Load dev env configuration
 if File.exist?('dev_config.yml')
   dev_config  = YAML.load_file('dev_config.yml')
@@ -21,6 +25,7 @@ end
 Vagrant.configure("2") do |config|
   
   config.vm.box = "centos/7"
+  config.vm.hostname = "vagrant-#{`hostname`[0..-2]}"
 
   config.vbguest.auto_update = true
 
@@ -32,20 +37,37 @@ Vagrant.configure("2") do |config|
 
   config.vm.network "private_network", ip: "172.16.16.16"
 
+  # Disabling the default /vagrant share
   config.vm.synced_folder ".", "/vagrant", disabled: true
-  config.vm.synced_folder "scripts", "/home/vagrant/provision_scripts", create: true
+
+  config.vm.synced_folder repo_provision_dir, provisioning_path, create: true
   config.vm.synced_folder dev_config["dev_dir"], "/home/vagrant/devel", create: true
+  # create and share the dir for file exchage between a host and a VM
+  Dir.mkdir('share') if ! Dir.exist?('share')
+  config.vm.synced_folder "share", "/home/vagrant/share", create: true
 
   config.vm.provider "virtualbox" do |vb|
-    vb.memory = "1024"
+    vb.memory = "2048"
   end
 
-  config.vm.provision "ansible" do |ansible|
-    ansible.config_file = "ansible/ansible.cfg"
-    ansible.playbook = "ansible/dev_machine.yml"
+  # Some preparations for ansible-galaxy to run successfully
+  config.vm.provision "shell" do |s|
+    s.inline = <<-SCRIPT
+yum -y install https://centos7.iuscommunity.org/ius-release.rpm
+yum -y install git2u
+SCRIPT
+  end
+
+  config.vm.provision "ansible_local" do |ansible|
+    ansible.install_mode = "pip"
+    ansible.version = dev_config["ansible_version"]
+    ansible.provisioning_path = provisioning_path
+    ansible.galaxy_role_file = "requirements.yml"
+    ansible.playbook = "site.yml"
+    ansible.verbose = "-vvv"
   end
 
   # Run custom user's provision script if exists
-  config.vm.provision "shell", inline: 'sudo bash /home/vagrant/provision_scripts/custom.sh' if File.exist?('scripts/custom.sh')
+  config.vm.provision "shell", inline: "sudo bash #{provisioning_path}/custom.sh" if File.exist?("#{repo_provision_dir}/custom.sh")
 
 end

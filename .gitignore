@@ -7,4 +7,8 @@
 # Environment specific configs and sensitive keys
 *.pem
 dev_config.yml
-scripts/custom.sh
+provision/custom.sh
+
+# Ansible
+provision/roles
+site.retry
