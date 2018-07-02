@@ -1,5 +1,5 @@
-Vagrant-powered local DevOps environment
-========================================
+Vagrant-powered local dev/ops environment
+=========================================
 
 Here you will find [Vagrantfile](./Vagrantfile), related configs and scripts for CentOS 7 VM. It's mainly useful for spinning up a local devops (development) environment
 
