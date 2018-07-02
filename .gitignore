@@ -1,4 +1,5 @@
 # Sublime Text
+*.sublime-project
 *.sublime-workspace
 
 # Vagrant
@@ -8,6 +9,7 @@
 *.pem
 dev_config.yml
 provision/custom.sh
+share/
 
 # Ansible
 provision/roles
