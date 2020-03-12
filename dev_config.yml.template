@@ -1,4 +1,4 @@
-ansible_version: '2.5.3'
+ansible_version: '2.9'
 # path to the code repositories local dir to have you code available inside the Vagrant VM
 dev_dir: '/Users/IvanIvanov/Devel'
 # port mapping for a port forwarding configuration, key - VM port, value - corresponding host port

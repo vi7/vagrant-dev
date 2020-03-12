@@ -47,7 +47,7 @@ Vagrant.configure("2") do |config|
   config.vm.synced_folder "share", "/home/vagrant/share", create: true
 
   config.vm.provider "virtualbox" do |vb|
-    vb.memory = "2048"
+    vb.memory = "4096"
   end
 
   # Some preparations for ansible-galaxy to run successfully
@@ -64,7 +64,7 @@ SCRIPT
     ansible.provisioning_path = provisioning_path
     ansible.galaxy_role_file = "requirements.yml"
     ansible.playbook = "site.yml"
-    ansible.verbose = "-vvv"
+    ansible.verbose = "-vv"
   end
 
   # Run custom user's provision script if exists
