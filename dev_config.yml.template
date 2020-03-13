@@ -1,9 +1,17 @@
-ansible_version: '2.9'
-# path to the code repositories local dir to have you code available inside the Vagrant VM
-dev_dir: '/Users/IvanIvanov/Devel'
-# port mapping for a port forwarding configuration, key - VM port, value - corresponding host port
+ansible_version: '2.9.6'
+## TODO: remove `dev_dir` after `synced_dir_mapping` implemented
+## path to the code repositories local dir to have you code available inside the Vagrant VM
+dev_dir: '/Users/johndoe/devel'
+## synced folder mappings, key - host path, value - guest path
+## At least one should be specified!!
+## Only `share` dir contents are ignored by git!
+synced_dir_mapping:
+- host_path: share
+  guest_path: /home/vagrant/share
+# - host_path: dir1
+#   guest_path: /mnt/dir1
+## port mapping for a port forwarding configuration, key - host port, value - guest port
 port_mapping:
-  # Netatalk AFP port
-  548: 9548
-  443: 9443
-  80:  980
+  # 9548: 548
+  # 9443: 443
+  # 980: 80

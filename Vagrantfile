@@ -23,15 +23,15 @@ end
 # backwards compatibility). Please don't change it unless you know what
 # you're doing.
 Vagrant.configure("2") do |config|
-  
+
   config.vm.box = "centos/7"
   config.vm.hostname = "vagrant-#{`hostname`[0..-2]}"
 
   config.vbguest.auto_update = true
 
   if dev_config["port_mapping"]
-    dev_config["port_mapping"].each do |guest, host|
-      config.vm.network "forwarded_port", guest: guest, host: host
+    dev_config["port_mapping"].each do |host, guest|
+      config.vm.network "forwarded_port", host: host, guest: guest
     end
   end
 
@@ -42,9 +42,11 @@ Vagrant.configure("2") do |config|
 
   config.vm.synced_folder repo_provision_dir, provisioning_path, create: true
   config.vm.synced_folder dev_config["dev_dir"], "/home/vagrant/devel", create: true
-  # create and share the dir for file exchage between a host and a VM
-  Dir.mkdir('share') if ! Dir.exist?('share')
-  config.vm.synced_folder "share", "/home/vagrant/share", create: true
+  # create and share dirs between the host and the VM
+  dev_config["synced_dir_mapping"].each do |item|
+    Dir.mkdir(item['host_path']) if ! Dir.exist?(item['host_path'])
+    config.vm.synced_folder item['host_path'], item['guest_path'], create: true
+  end
 
   config.vm.provider "virtualbox" do |vb|
     vb.memory = "4096"
