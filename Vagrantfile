@@ -50,6 +50,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.provider "virtualbox" do |vb|
     vb.memory = "4096"
+    v.cpus = 2
   end
 
   # Some preparations for ansible-galaxy to run successfully
