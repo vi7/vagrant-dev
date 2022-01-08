@@ -24,7 +24,7 @@ end
 # you're doing.
 Vagrant.configure("2") do |config|
 
-  config.vm.box = "centos/7"
+  config.vm.box = "generic/fedora35"
   config.vm.hostname = "vagrant-#{`hostname`[0..-2]}"
 
   config.vbguest.auto_update = true
@@ -35,13 +35,13 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  config.vm.network "private_network", ip: "172.16.16.16"
+  config.vm.network "private_network", ip: "192.168.60.60"
 
   # Disabling the default /vagrant share
   config.vm.synced_folder ".", "/vagrant", disabled: true
 
   config.vm.synced_folder repo_provision_dir, provisioning_path, create: true
-  config.vm.synced_folder dev_config["dev_dir"], "/home/vagrant/devel", create: true
+  config.vm.synced_folder dev_config["dev_dir"], "/home/vagrant/gitrepo", create: true
   # create and share dirs between the host and the VM
   dev_config["synced_dir_mapping"].each do |item|
     Dir.mkdir(item['host_path']) if ! Dir.exist?(item['host_path'])
@@ -56,14 +56,14 @@ Vagrant.configure("2") do |config|
   # Some preparations for ansible-galaxy to run successfully
   config.vm.provision "shell" do |s|
     s.inline = <<-SCRIPT
-yum -y install https://centos7.iuscommunity.org/ius-release.rpm
-yum -y install git2u
+dnf -y install git
 SCRIPT
   end
 
   config.vm.provision "ansible_local" do |ansible|
-    ansible.install_mode = "pip"
-    ansible.version = dev_config["ansible_version"]
+    ansible.install_mode = :pip_args_only
+    ansible.pip_install_cmd = "sudo dnf -y install python3-pip"
+    ansible.pip_args = "-r /home/vagrant/provision/requirements.txt"
     ansible.provisioning_path = provisioning_path
     ansible.galaxy_role_file = "requirements.yml"
     ansible.playbook = "site.yml"
