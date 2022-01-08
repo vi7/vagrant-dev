@@ -26,8 +26,8 @@ Vagrant.configure("2") do |config|
 
   config.vm.box = "generic/fedora35"
   config.vm.hostname = "vagrant-#{`hostname`[0..-2]}"
-
   config.vbguest.auto_update = true
+  config.ssh.forward_agent = true
 
   if dev_config["port_mapping"]
     dev_config["port_mapping"].each do |host, guest|
